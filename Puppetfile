@@ -1,0 +1,12 @@
+forge "https://forgeapi.puppetlabs.com"
+
+mod "puppetlabs/git"
+mod "puppetlabs/firewall"
+mod "elastic-elasticsearch", "5.1.1"
+mod "elastic-logstash", "5.1.0"
+mod "elastic-kibana", "0.2.1"
+mod "richardc-datacat"
+mod "puppetlabs/java_ks"
+mod "pcfens-filebeat"
+mod "puppetlabs/haproxy"
+mod "puppet-nginx"

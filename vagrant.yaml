@@ -1,0 +1,111 @@
+boxes:
+  puppetlabs/centos-7.2-64-puppet: "puppetlabs/centos-7.2-64-puppet"
+  centos/7: "centos/7"
+nodes:
+  nginx:
+    hostname: nginx.vagrant.vm
+    box: puppetlabs/centos-7.2-64-puppet
+    memory: 512
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.60
+    provisioners:
+      - puppet:
+          manifests_path: "manifests"
+          manifest_file: "nginx.pp"
+          module_path: ["modules"]
+          options: "--verbose --debug"
+    synced_folders:
+      - host: .
+        guest: /vagrant
+
+  haproxy:
+    hostname: haproxy.vagrant.vm
+    box: puppetlabs/centos-7.2-64-puppet
+    memory: 512
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.50
+    provisioners:
+      - puppet:
+          manifests_path: "manifests"
+          manifest_file: "haproxy.pp"
+          module_path: ["modules"]
+          options: "--verbose --debug"
+    synced_folders:
+      - host: .
+        guest: /vagrant
+
+  elk:
+    hostname: elk.vagrant.vm
+    box: puppetlabs/centos-7.2-64-puppet
+    memory: 4096
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.40
+    provisioners:
+      - puppet:
+          manifests_path: "manifests"
+          manifest_file: "elk.pp"
+          module_path: ["modules", "site"]
+          options: "--verbose --debug"
+    synced_folders:
+      - host: .
+        guest: /vagrant
+
+  springboot2:
+    hostname: springboot2.vagrant.vm
+    box: puppetlabs/centos-7.2-64-puppet
+    memory: 1024
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.30
+    provisioners:
+      - puppet:
+          manifests_path: "manifests"
+          manifest_file: "springboot.pp"
+          module_path: ["modules", "site", "packages"]
+          options: "--verbose --debug"
+    synced_folders:
+      - host: packages/
+        guest: /vagrant/packages
+
+  springboot1:
+    hostname: springboot1.vagrant.vm
+    box: puppetlabs/centos-7.2-64-puppet
+    memory: 1024
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.20
+    provisioners:
+      - puppet:
+          manifests_path: "manifests"
+          manifest_file: "springboot.pp"
+          module_path: ["modules", "site"]
+          options: "--verbose --debug"
+    synced_folders:
+      - host: packages/
+        guest: /vagrant/packages
+
+  jenkins:
+    hostname: jenkins.vagrant.vm
+    box: centos/7
+    memory: 2048
+    cpus: 1
+    networks:
+      - private_network:
+          ip: 172.16.10.10
+      - forwarded_port:
+          guest: 8081
+          host: 8081
+    provisioners:
+      - shell:
+          path: "jenkins/bootstrap.sh"
+    synced_folders:
+      - host: jenkins/
+        guest: /home/vagrant/jenkins
